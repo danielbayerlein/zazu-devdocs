@@ -10,6 +10,8 @@
 To search API documentations type `devdocs` then the name of the documentation to search for.
 For example `devdocs bootstrap`.
 
+![screenshot](./screenshot.png)
+
 ## Install
 
 Add `danielbayerlein/zazu-devdocs` inside of plugins block of your `~/.zazurc.json` file.
