@@ -14,7 +14,7 @@ For example `devdocs bootstrap`.
 
 ## Install
 
-Add `danielbayerlein/zazu-devdocs` inside of plugins block of your `~/.zazurc.json` file.
+Add `danielbayerlein/zazu-devdocs` inside of `plugins` block of your `~/.zazurc.json` file.
 
 ```json
 {
