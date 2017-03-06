@@ -1,5 +1,5 @@
-const index = require('../src/');
-const devdocs = require('../src/devdocs');
+const index = require('../../src/');
+const devdocs = require('../../src/devdocs');
 
 describe('index.js', () => {
   beforeEach(() => {
