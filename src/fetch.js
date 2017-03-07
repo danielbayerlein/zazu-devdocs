@@ -24,7 +24,7 @@ const cache = new CacheConf();
  * @param  {string}  key Cache key
  * @return {Promise}     Returns a promise that is fulfilled with the JSON result
  */
-const fetch = (url, key) => { // eslint-disable-line
+const fetch = (url, key) => {
   const cachedResponse = cache.get(key, { ignoreMaxAge: true });
 
   if (cachedResponse && !cache.isExpired(key)) {
