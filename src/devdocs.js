@@ -1,9 +1,22 @@
 const fetch = require('./fetch');
 
+/**
+ * Search for a word in a string
+ *
+ * @param  {string}  searchString Search word
+ * @param  {string}  string       String to search for
+ * @return {boolean}              Returns true or false if the word was found
+ */
 const search = (searchString, string) => (
   string.toLowerCase().includes(searchString.toLowerCase())
 );
 
+/**
+ * Search for documentation
+ *
+ * @param  {string}  query Search word
+ * @return {Promise}       Returns a promise that is fulfilled with the JSON result
+ */
 const searchDocs = query => (
   fetch.docs()
     .then(docs => docs.filter(doc => search(query, doc.name)))
@@ -20,6 +33,13 @@ const searchDocs = query => (
     .catch(error => console.error(error)) // eslint-disable-line no-console
 );
 
+/**
+ * Search for a query within a documentation
+ *
+ * @param  {string}  docQuery    Documentation to be searched for
+ * @param  {string}  searchQuery Query to be searched for
+ * @return {Promise}             Returns a promise that is fulfilled with the JSON result
+ */
 const searchInDoc = (docQuery, searchQuery) => (
   new Promise((resolve, reject) => (
     fetch.docs()
