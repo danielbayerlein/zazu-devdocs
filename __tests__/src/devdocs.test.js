@@ -58,6 +58,18 @@ describe('devdocs.js', () => {
           expect(docs[0].icon).toBe('./icons/bootstrap.png');
         })
       ));
+
+      test('call console.error with an error message', () => {
+        const msg = "The page you were looking for doesn't exist.";
+
+        fetch.docs.mockImplementation(() => new Promise((resolve, reject) => reject(msg)));
+
+        return devdocs.search('bootstrap')
+          .catch(() => {
+            // eslint-disable-next-line no-console
+            expect(console.error).toHaveBeenCalledWith(msg);
+          });
+      });
     });
 
     describe('searchInDoc', () => {
@@ -94,6 +106,30 @@ describe('devdocs.js', () => {
           expect(docs[0].icon).toBe('./icons/bootstrap.png');
         })
       ));
+
+      test('if fetch.docs fails then call console.error with an error message', () => {
+        const msg = "The page you were looking for doesn't exist.";
+
+        fetch.docs.mockImplementation(() => new Promise((resolve, reject) => reject(msg)));
+
+        return devdocs.search('bootstrap modal')
+          .then(() => (
+            // eslint-disable-next-line no-console
+            expect(console.error).toHaveBeenCalledWith(msg)
+          ));
+      });
+
+      test('if fetch.doc fails then call console.error with an error message', () => {
+        const msg = "The page you were looking for doesn't exist.";
+
+        fetch.doc.mockImplementation(() => new Promise((resolve, reject) => reject(msg)));
+
+        return devdocs.search('bootstrap modal')
+          .then(() => (
+            // eslint-disable-next-line no-console
+            expect(console.error).toHaveBeenCalledWith(msg)
+          ));
+      });
     });
   });
 

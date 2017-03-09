@@ -45,6 +45,7 @@ const searchInDoc = (docQuery, searchQuery) => (
       ))
       .catch(error => reject(error))
   ))
+  .catch(error => console.error(error)) // eslint-disable-line no-console
 );
 
 module.exports.search = query => (
