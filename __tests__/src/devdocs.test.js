@@ -113,10 +113,10 @@ describe('devdocs.js', () => {
         fetch.docs.mockImplementation(() => new Promise((resolve, reject) => reject(msg)));
 
         return devdocs.search('bootstrap modal')
-          .then(() => (
+          .then(() => {
             // eslint-disable-next-line no-console
-            expect(console.error).toHaveBeenCalledWith(msg)
-          ));
+            expect(console.error).toHaveBeenCalledWith(msg);
+          });
       });
 
       test('if fetch.doc fails then call console.error with an error message', () => {
@@ -125,10 +125,10 @@ describe('devdocs.js', () => {
         fetch.doc.mockImplementation(() => new Promise((resolve, reject) => reject(msg)));
 
         return devdocs.search('bootstrap modal')
-          .then(() => (
+          .then(() => {
             // eslint-disable-next-line no-console
-            expect(console.error).toHaveBeenCalledWith(msg)
-          ));
+            expect(console.error).toHaveBeenCalledWith(msg);
+          });
       });
     });
   });
