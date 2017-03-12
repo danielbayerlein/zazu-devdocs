@@ -65,7 +65,7 @@ describe('devdocs.js', () => {
         fetch.docs.mockImplementation(() => new Promise((resolve, reject) => reject(msg)));
 
         return devdocs.search('bootstrap')
-          .catch(() => {
+          .then(() => {
             // eslint-disable-next-line no-console
             expect(console.error).toHaveBeenCalledWith(msg);
           });
