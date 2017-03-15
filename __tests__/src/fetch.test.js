@@ -1,15 +1,21 @@
-jest.mock('got');
-jest.mock('cache-conf');
-
-const pkg = require('../../package.json');
+/* eslint global-require: 0 */
 
 describe('fetch.js', () => {
   let got;
   let fetch;
+  let cache;
+
+  const pkg = require('../../package.json');
 
   beforeEach(() => {
-    got = require('got'); // eslint-disable-line global-require
-    fetch = require('../../src/fetch'); // eslint-disable-line global-require
+    jest.mock('got');
+    got = require('got');
+
+    jest.mock('cache-conf');
+    cache = { get: jest.fn(), isExpired: jest.fn(), set: jest.fn() };
+    require('cache-conf').mockImplementation(() => cache);
+
+    fetch = require('../../src/fetch');
   });
 
   afterEach(() => {
@@ -18,9 +24,10 @@ describe('fetch.js', () => {
   });
 
   describe('fetchDocs', () => {
+    const mockResult = require('../../__mocks__/docs.json');
+
     beforeEach(() => {
       got.mockImplementation(() => new Promise(resolve => resolve({
-        // eslint-disable-next-line global-require
         body: require('../../__mocks__/docs.json'),
       })));
     });
@@ -39,12 +46,75 @@ describe('fetch.js', () => {
           );
         })
     ));
+
+    test('returns the expected error', () => {
+      const message = "The page you were looking for doesn't exist.";
+
+      got.mockImplementation(() => new Promise((resolve, reject) => reject(message)));
+
+      return fetch.docs()
+        .catch((error) => {
+          expect(error).toBe(message);
+        });
+    });
+
+    test('call cache.get with the expected arguments', () => (
+      fetch.docs()
+        .then(() => {
+          expect(cache.get).toBeCalledWith(
+            'zazu-devdocs.docs',
+            { ignoreMaxAge: true },
+          );
+        })
+    ));
+
+    test('call cache.set with the expected arguments', () => (
+      fetch.docs()
+        .then(() => {
+          expect(cache.set).toBeCalledWith(
+            'zazu-devdocs.docs',
+            mockResult,
+            { maxAge: 86400000 },
+          );
+        })
+    ));
+
+    test('call cache.isExpired with the expected argument', () => {
+      cache.get = jest.fn(() => mockResult);
+
+      return fetch.docs()
+        .then(() => {
+          expect(cache.isExpired).toBeCalledWith('zazu-devdocs.docs');
+        });
+    });
+
+    test('returns the cache result', () => {
+      cache.isExpired = jest.fn(() => false);
+      cache.get = jest.fn(() => mockResult);
+
+      return fetch.docs()
+        .then((docs) => {
+          expect(docs).toEqual(mockResult);
+        });
+    });
+
+    test('returns the cache result when an error occurs', () => {
+      cache.isExpired = jest.fn(() => true);
+      cache.get = jest.fn(() => mockResult);
+      got.mockImplementation(() => new Promise((resolve, reject) => reject()));
+
+      return fetch.docs()
+        .then((docs) => {
+          expect(docs).toEqual(mockResult);
+        });
+    });
   });
 
   describe('fetchDoc', () => {
+    const mockResult = require('../../__mocks__/doc.json');
+
     beforeEach(() => {
       got.mockImplementation(() => new Promise(resolve => resolve({
-        // eslint-disable-next-line global-require
         body: require('../../__mocks__/doc.json'),
       })));
     });
@@ -63,5 +133,67 @@ describe('fetch.js', () => {
           );
         })
     ));
+
+    test('returns the expected error', () => {
+      const message = "The page you were looking for doesn't exist.";
+
+      got.mockImplementation(() => new Promise((resolve, reject) => reject(message)));
+
+      return fetch.doc('bootstrap~4')
+        .catch((error) => {
+          expect(error).toBe(message);
+        });
+    });
+
+    test('call cache.get with the expected arguments', () => (
+      fetch.doc('bootstrap~4')
+        .then(() => {
+          expect(cache.get).toBeCalledWith(
+            'zazu-devdocs.docs.bootstrap~4',
+            { ignoreMaxAge: true },
+          );
+        })
+    ));
+
+    test('call cache.set with the expected arguments', () => (
+      fetch.doc('bootstrap~4')
+        .then(() => {
+          expect(cache.set).toBeCalledWith(
+            'zazu-devdocs.docs.bootstrap~4',
+            mockResult,
+            { maxAge: 86400000 },
+          );
+        })
+    ));
+
+    test('call cache.isExpired with the expected argument', () => {
+      cache.get = jest.fn(() => mockResult);
+
+      return fetch.doc('bootstrap~4')
+        .then(() => {
+          expect(cache.isExpired).toBeCalledWith('zazu-devdocs.docs.bootstrap~4');
+        });
+    });
+
+    test('returns the cache result', () => {
+      cache.isExpired = jest.fn(() => false);
+      cache.get = jest.fn(() => mockResult);
+
+      return fetch.doc('bootstrap~4')
+        .then((doc) => {
+          expect(doc).toEqual(mockResult);
+        });
+    });
+
+    test('returns the cache result when an error occurs', () => {
+      cache.isExpired = jest.fn(() => true);
+      cache.get = jest.fn(() => mockResult);
+      got.mockImplementation(() => new Promise((resolve, reject) => reject()));
+
+      return fetch.docs()
+        .then((docs) => {
+          expect(docs).toEqual(mockResult);
+        });
+    });
   });
 });

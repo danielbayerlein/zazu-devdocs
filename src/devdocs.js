@@ -18,19 +18,21 @@ const search = (searchString, string) => (
  * @return {Promise}       Returns a promise that is fulfilled with the JSON result
  */
 const searchDocs = query => (
-  fetch.docs()
-    .then(docs => docs.filter(doc => search(query, doc.name)))
-    .then(docs => (
-      docs.map(doc => (
-        {
-          title: doc.name,
-          value: `https://devdocs.io/${doc.slug}`,
-          subtitle: doc.release,
-          icon: `./icons/${doc.slug.split('~')[0]}.png`,
-        }
+  new Promise((resolve, reject) => (
+    fetch.docs()
+      .then(docs => docs.filter(doc => search(query, doc.name)))
+      .then(docs => (
+        resolve(
+          docs.map(doc => ({
+            title: doc.name,
+            value: `https://devdocs.io/${doc.slug}`,
+            subtitle: doc.release,
+            icon: `./icons/${doc.slug.split('~')[0]}.png`,
+          })),
+        )
       ))
-    ))
-    .catch(error => console.error(error)) // eslint-disable-line no-console
+      .catch(error => reject(error))
+  ))
 );
 
 /**
@@ -50,14 +52,12 @@ const searchInDoc = (docQuery, searchQuery) => (
             .then(data => data.entries.filter(entry => search(searchQuery, entry.name)))
             .then(entries => (
               resolve(
-                entries.map(entry => (
-                  {
-                    title: entry.name,
-                    value: `https://devdocs.io/${doc.slug}/${entry.path}`,
-                    subtitle: doc.name,
-                    icon: `./icons/${doc.slug.split('~')[0]}.png`,
-                  }
-                )),
+                entries.map(entry => ({
+                  title: entry.name,
+                  value: `https://devdocs.io/${doc.slug}/${entry.path}`,
+                  subtitle: doc.name,
+                  icon: `./icons/${doc.slug.split('~')[0]}.png`,
+                })),
               )
             ))
             .catch(error => reject(error))
@@ -65,7 +65,6 @@ const searchInDoc = (docQuery, searchQuery) => (
       ))
       .catch(error => reject(error))
   ))
-  .catch(error => console.error(error)) // eslint-disable-line no-console
 );
 
 module.exports.search = query => (

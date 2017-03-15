@@ -1,3 +1,5 @@
+/* eslint global-require: 0 */
+
 describe('devdocs.js', () => {
   describe('search', () => {
     let fetch;
@@ -6,16 +8,15 @@ describe('devdocs.js', () => {
 
     beforeEach(() => {
       jest.mock('../../src/fetch');
-      fetch = require('../../src/fetch'); // eslint-disable-line global-require
-      devdocs = require('../../src/devdocs'); // eslint-disable-line global-require
-      console.error = jest.fn(); // eslint-disable-line no-console
+      fetch = require('../../src/fetch');
+      devdocs = require('../../src/devdocs');
 
       fetch.docs.mockImplementation(() => new Promise(resolve => resolve(
-        require('../../__mocks__/docs.json'), // eslint-disable-line global-require
+        require('../../__mocks__/docs.json'),
       )));
 
       fetch.doc.mockImplementation(() => new Promise(resolve => resolve(
-        require('../../__mocks__/doc.json'), // eslint-disable-line global-require
+        require('../../__mocks__/doc.json'),
       )));
     });
 
@@ -59,15 +60,14 @@ describe('devdocs.js', () => {
         })
       ));
 
-      test('call console.error with an error message', () => {
-        const msg = "The page you were looking for doesn't exist.";
+      test('returns the expected error', () => {
+        const message = "The page you were looking for doesn't exist.";
 
-        fetch.docs.mockImplementation(() => new Promise((resolve, reject) => reject(msg)));
+        fetch.docs.mockImplementation(() => new Promise((resolve, reject) => reject(message)));
 
         return devdocs.search('bootstrap')
-          .then(() => {
-            // eslint-disable-next-line no-console
-            expect(console.error).toHaveBeenCalledWith(msg);
+          .catch((error) => {
+            expect(error).toBe(message);
           });
       });
     });
@@ -107,34 +107,33 @@ describe('devdocs.js', () => {
         })
       ));
 
-      test('if fetch.docs fails then call console.error with an error message', () => {
-        const msg = "The page you were looking for doesn't exist.";
+      test('if fetch.docs fails then return the expected error', () => {
+        const message = "The page you were looking for doesn't exist.";
 
-        fetch.docs.mockImplementation(() => new Promise((resolve, reject) => reject(msg)));
+        fetch.docs.mockImplementation(() => new Promise((resolve, reject) => reject(message)));
 
         return devdocs.search('bootstrap modal')
-          .then(() => {
-            // eslint-disable-next-line no-console
-            expect(console.error).toHaveBeenCalledWith(msg);
+          .catch((error) => {
+            expect(error).toBe(message);
           });
       });
 
-      test('if fetch.doc fails then call console.error with an error message', () => {
-        const msg = "The page you were looking for doesn't exist.";
+      test('if fetch.doc fails then return the expected error', () => {
+        const message = "The page you were looking for doesn't exist.";
 
-        fetch.doc.mockImplementation(() => new Promise((resolve, reject) => reject(msg)));
+        fetch.doc.mockImplementation(() => new Promise((resolve, reject) => reject(message)));
 
         return devdocs.search('bootstrap modal')
-          .then(() => {
-            // eslint-disable-next-line no-console
-            expect(console.error).toHaveBeenCalledWith(msg);
+          .catch((error) => {
+            expect(error).toBe(message);
           });
       });
     });
   });
 
   describe('integration', () => {
-    // eslint-disable-next-line global-require
+    jest.mock('cache-conf');
+
     const devdocs = require('../../src/devdocs');
 
     describe('searchDocs', () => {
@@ -172,6 +171,8 @@ describe('devdocs.js', () => {
     });
 
     describe('searchInDoc', () => {
+      jest.mock('cache-conf');
+
       const searchResult = devdocs.search('bootstrap modal');
 
       test('returns an array', () => (

@@ -20,30 +20,34 @@ const cache = new CacheConf();
  * Fetch the URL, cache the result and return it.
  * Returns the cache result if it is valid.
  *
- * @param  {string}  url URL to fetch
- * @param  {string}  key Cache key
- * @return {Promise}     Returns a promise that is fulfilled with the JSON result
+ * @param  {string}  url      URL to fetch
+ * @param  {string}  cacheKey Cache key
+ * @return {Promise}          Returns a promise that is fulfilled with the JSON result
  */
-const fetch = (url, key) => {
-  const cachedResponse = cache.get(key, { ignoreMaxAge: true });
+const fetch = (url, cacheKey) => {
+  const cachedResponse = cache.get(cacheKey, { ignoreMaxAge: true });
 
-  if (cachedResponse && !cache.isExpired(key)) {
+  if (cachedResponse && !cache.isExpired(cacheKey)) {
     return Promise.resolve(cachedResponse);
   }
 
-  return got(url, GOT_OPTIONS)
-    .then((response) => {
-      const data = response.body;
-      cache.set(key, data, { maxAge: CACHE_CONF.maxAge });
-      return data;
-    })
-    .catch((error) => {
-      if (cachedResponse) {
-        return cachedResponse;
-      }
+  return new Promise((resolve, reject) => (
+    got(url, GOT_OPTIONS)
+      .then((response) => {
+        const data = response.body;
 
-      throw error;
-    });
+        cache.set(cacheKey, data, { maxAge: CACHE_CONF.maxAge });
+
+        resolve(data);
+      })
+      .catch((error) => {
+        if (cachedResponse) {
+          resolve(cachedResponse);
+        }
+
+        reject(error);
+      })
+  ));
 };
 
 const fetchDocs = () => (
