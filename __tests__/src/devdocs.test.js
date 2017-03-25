@@ -66,7 +66,7 @@ describe('devdocs.js', () => {
         })
       ));
 
-      test('returns the expected error', () => {
+      test('if fetch.docs fails then return the expected error', () => {
         const message = "The page you were looking for doesn't exist.";
 
         fetch.docs.mockImplementation(() => new Promise((resolve, reject) => reject(message)));
