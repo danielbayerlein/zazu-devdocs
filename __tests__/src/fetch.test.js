@@ -15,6 +15,12 @@ describe('fetch.js', () => {
     cache = { get: jest.fn(), isExpired: jest.fn(), set: jest.fn() };
     require('cache-conf').mockImplementation(() => cache);
 
+    jest.mock('../../package.json', () => ({
+      homepage: 'https://github.com/danielbayerlein/zazu-devdocs#readme',
+      name: 'zazu-devdocs',
+      version: '1.0.0',
+    }));
+
     fetch = require('../../src/fetch');
   });
 

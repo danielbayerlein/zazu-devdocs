@@ -1,4 +1,13 @@
 const fetch = require('./fetch');
+const pkg = require('../package.json');
+
+/**
+ * Composite ID
+ *
+ * @param  {string} suffix Suffix of the id
+ * @return {string}        Returns the composite id
+ */
+const compositeId = suffix => `${pkg.name}.${suffix}`;
 
 /**
  * Search for a word in a string
@@ -24,6 +33,7 @@ const searchDocs = query => (
       .then(docs => (
         resolve(
           docs.map(doc => ({
+            id: compositeId(doc.name),
             title: doc.name,
             value: `https://devdocs.io/${doc.slug}`,
             subtitle: doc.release,
@@ -53,6 +63,7 @@ const searchInDoc = (docQuery, searchQuery) => (
             .then(entries => (
               resolve(
                 entries.map(entry => ({
+                  id: compositeId(entry.name),
                   title: entry.name,
                   value: `https://devdocs.io/${doc.slug}/${entry.path}`,
                   subtitle: doc.name,

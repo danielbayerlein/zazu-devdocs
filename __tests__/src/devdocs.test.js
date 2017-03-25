@@ -36,6 +36,12 @@ describe('devdocs.js', () => {
         })
       ));
 
+      test('returns the expected id', () => (
+        searchResult.then((docs) => {
+          expect(docs[0].id).toBe('zazu-devdocs.Bootstrap');
+        })
+      ));
+
       test('returns the expected title', () => (
         searchResult.then((docs) => {
           expect(docs[0].title).toBe('Bootstrap');
@@ -80,6 +86,12 @@ describe('devdocs.js', () => {
       test('returns an array', () => (
         searchResult.then((docs) => {
           expect(docs).toBeInstanceOf(Array);
+        })
+      ));
+
+      test('returns the expected id', () => (
+        searchResult.then((docs) => {
+          expect(docs[0].id).toBe('zazu-devdocs.Modal');
         })
       ));
 
@@ -145,6 +157,12 @@ describe('devdocs.js', () => {
         })
       ));
 
+      test('returns an object with a id', () => (
+        searchResult.then((docs) => {
+          expect(docs[0].id).toBeDefined();
+        })
+      ));
+
       test('returns an object with a title', () => (
         searchResult.then((docs) => {
           expect(docs[0].title).toBeDefined();
@@ -178,6 +196,12 @@ describe('devdocs.js', () => {
       test('returns an array', () => (
         searchResult.then((docs) => {
           expect(docs).toBeInstanceOf(Array);
+        })
+      ));
+
+      test('returns an object with a id', () => (
+        searchResult.then((docs) => {
+          expect(docs[0].id).toBeDefined();
         })
       ));
 
