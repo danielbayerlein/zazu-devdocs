@@ -27,15 +27,15 @@ const search = (searchString, string) => (
  * @return {Promise}       Returns a promise that is fulfilled with the JSON result
  */
 const searchDocs = query => (
-    fetch.docs()
-      .then(docs => docs.filter(doc => search(query, doc.name)))
-      .then(docs => docs.map(doc => ({
-        id: compositeId(doc.name),
-        title: doc.name,
-        value: `https://devdocs.io/${doc.slug}`,
-        subtitle: doc.release,
-        icon: `./icons/${doc.slug.split('~')[0]}.png`,
-      })))
+  fetch.docs()
+    .then(docs => docs.filter(doc => search(query, doc.name)))
+    .then(docs => docs.map(doc => ({
+      id: compositeId(doc.name),
+      title: doc.name,
+      value: `https://devdocs.io/${doc.slug}`,
+      subtitle: doc.release,
+      icon: `./icons/${doc.slug.split('~')[0]}.png`,
+    })))
 );
 
 /**
