@@ -30,6 +30,7 @@ describe('devdocs.js', () => {
           .search('bootstrap')
           .then((docs) => {
             expect(docs).toBeInstanceOf(Array);
+
             expect(docs[0]).toEqual({
               id: 'zazu-devdocs.Bootstrap',
               title: 'Bootstrap',
@@ -58,6 +59,7 @@ describe('devdocs.js', () => {
           .search('bootstrap modal')
           .then((docs) => {
             expect(docs).toBeInstanceOf(Array);
+
             expect(docs[0]).toEqual({
               id: 'zazu-devdocs.Modal',
               title: 'Modal',
