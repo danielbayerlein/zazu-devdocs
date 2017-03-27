@@ -27,22 +27,36 @@ const search = (searchString, string) => (
  * @return {Promise}       Returns a promise that is fulfilled with the JSON result
  */
 const searchDocs = query => (
-  new Promise((resolve, reject) => (
     fetch.docs()
       .then(docs => docs.filter(doc => search(query, doc.name)))
-      .then(docs => (
-        resolve(
-          docs.map(doc => ({
-            id: compositeId(doc.name),
-            title: doc.name,
-            value: `https://devdocs.io/${doc.slug}`,
-            subtitle: doc.release,
-            icon: `./icons/${doc.slug.split('~')[0]}.png`,
-          })),
-        )
-      ))
-      .catch(error => reject(error))
-  ))
+      .then(docs => docs.map(doc => ({
+        id: compositeId(doc.name),
+        title: doc.name,
+        value: `https://devdocs.io/${doc.slug}`,
+        subtitle: doc.release,
+        icon: `./icons/${doc.slug.split('~')[0]}.png`,
+      })))
+);
+
+/**
+ * Searches within each documentation for a documentation with the searchQuery
+ *
+ * @param  {array}   docs        Found documentations
+ * @param  {string}  searchQuery Query to be searched for
+ * @return {Promise}             Returns a promise with all matches
+ */
+const searchInDocs = (docs, searchQuery) => (
+  Promise.all(docs.map(doc => (
+    fetch.doc(doc.slug)
+      .then(data => data.entries.filter(entry => search(searchQuery, entry.name)))
+      .then(entries => entries.map(entry => ({
+        id: compositeId(entry.name),
+        title: entry.name,
+        value: `https://devdocs.io/${doc.slug}/${entry.path}`,
+        subtitle: doc.name,
+        icon: `./icons/${doc.slug.split('~')[0]}.png`,
+      })))
+  )))
 );
 
 /**
@@ -53,29 +67,10 @@ const searchDocs = query => (
  * @return {Promise}             Returns a promise that is fulfilled with the JSON result
  */
 const searchInDoc = (docQuery, searchQuery) => (
-  new Promise((resolve, reject) => (
     fetch.docs()
       .then(docs => docs.filter(doc => search(docQuery, doc.name)))
-      .then(docs => (
-        docs.map(doc => (
-          fetch.doc(doc.slug)
-            .then(data => data.entries.filter(entry => search(searchQuery, entry.name)))
-            .then(entries => (
-              resolve(
-                entries.map(entry => ({
-                  id: compositeId(entry.name),
-                  title: entry.name,
-                  value: `https://devdocs.io/${doc.slug}/${entry.path}`,
-                  subtitle: doc.name,
-                  icon: `./icons/${doc.slug.split('~')[0]}.png`,
-                })),
-              )
-            ))
-            .catch(error => reject(error))
-        ))
-      ))
-      .catch(error => reject(error))
-  ))
+      .then(docs => searchInDocs(docs, searchQuery))
+      .then(docs => [].concat(...docs))
 );
 
 module.exports.search = query => (

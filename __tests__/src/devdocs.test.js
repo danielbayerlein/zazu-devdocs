@@ -4,7 +4,6 @@ describe('devdocs.js', () => {
   describe('search', () => {
     let fetch;
     let devdocs;
-    let searchResult;
 
     beforeEach(() => {
       jest.mock('../../src/fetch');
@@ -26,44 +25,19 @@ describe('devdocs.js', () => {
     });
 
     describe('searchDocs', () => {
-      beforeEach(() => {
-        searchResult = devdocs.search('bootstrap');
-      });
-
-      test('returns an array', () => (
-        searchResult.then((docs) => {
-          expect(docs).toBeInstanceOf(Array);
-        })
-      ));
-
-      test('returns the expected id', () => (
-        searchResult.then((docs) => {
-          expect(docs[0].id).toBe('zazu-devdocs.Bootstrap');
-        })
-      ));
-
-      test('returns the expected title', () => (
-        searchResult.then((docs) => {
-          expect(docs[0].title).toBe('Bootstrap');
-        })
-      ));
-
-      test('returns the expected value', () => (
-        searchResult.then((docs) => {
-          expect(docs[0].value).toBe('https://devdocs.io/bootstrap~4');
-        })
-      ));
-
-      test('returns the expected subtitle', () => (
-        searchResult.then((docs) => {
-          expect(docs[0].subtitle).toBe('alpha.6');
-        })
-      ));
-
-      test('returns the expected icon', () => (
-        searchResult.then((docs) => {
-          expect(docs[0].icon).toBe('./icons/bootstrap.png');
-        })
+      test('returns an array with the expected structure', () => (
+        devdocs
+          .search('bootstrap')
+          .then((docs) => {
+            expect(docs).toBeInstanceOf(Array);
+            expect(docs[0]).toEqual({
+              id: 'zazu-devdocs.Bootstrap',
+              title: 'Bootstrap',
+              value: 'https://devdocs.io/bootstrap~4',
+              subtitle: 'alpha.6',
+              icon: './icons/bootstrap.png',
+            });
+          })
       ));
 
       test('if fetch.docs fails then return the expected error', () => {
@@ -79,44 +53,19 @@ describe('devdocs.js', () => {
     });
 
     describe('searchInDoc', () => {
-      beforeEach(() => {
-        searchResult = devdocs.search('bootstrap modal');
-      });
-
-      test('returns an array', () => (
-        searchResult.then((docs) => {
-          expect(docs).toBeInstanceOf(Array);
-        })
-      ));
-
-      test('returns the expected id', () => (
-        searchResult.then((docs) => {
-          expect(docs[0].id).toBe('zazu-devdocs.Modal');
-        })
-      ));
-
-      test('returns the expected title', () => (
-        searchResult.then((docs) => {
-          expect(docs[0].title).toBe('Modal');
-        })
-      ));
-
-      test('returns the expected value', () => (
-        searchResult.then((docs) => {
-          expect(docs[0].value).toBe('https://devdocs.io/bootstrap~4/components/modal');
-        })
-      ));
-
-      test('returns the expected subtitle', () => (
-        searchResult.then((docs) => {
-          expect(docs[0].subtitle).toBe('Bootstrap');
-        })
-      ));
-
-      test('returns the expected icon', () => (
-        searchResult.then((docs) => {
-          expect(docs[0].icon).toBe('./icons/bootstrap.png');
-        })
+      test('returns an array with the expected structure', () => (
+        devdocs
+          .search('bootstrap modal')
+          .then((docs) => {
+            expect(docs).toBeInstanceOf(Array);
+            expect(docs[0]).toEqual({
+              id: 'zazu-devdocs.Modal',
+              title: 'Modal',
+              value: 'https://devdocs.io/bootstrap~4/components/modal',
+              subtitle: 'Bootstrap',
+              icon: './icons/bootstrap.png',
+            });
+          })
       ));
 
       test('if fetch.docs fails then return the expected error', () => {
