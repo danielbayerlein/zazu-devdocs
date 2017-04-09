@@ -4,6 +4,7 @@
 
 [![Build Status](https://travis-ci.org/danielbayerlein/zazu-devdocs.svg?branch=master)](https://travis-ci.org/danielbayerlein/zazu-devdocs)
 [![codecov](https://codecov.io/gh/danielbayerlein/zazu-devdocs/branch/master/graph/badge.svg)](https://codecov.io/gh/danielbayerlein/zazu-devdocs)
+[![JavaScript Style Guide](https://img.shields.io/badge/code_style-standard-brightgreen.svg)](https://standardjs.com)
 
 ## Usage
 

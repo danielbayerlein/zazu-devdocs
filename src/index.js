@@ -1,3 +1,3 @@
-const devdocs = require('./devdocs');
+const devdocs = require('./devdocs')
 
-module.exports = () => name => devdocs.search(name);
+module.exports = () => name => devdocs.search(name)
