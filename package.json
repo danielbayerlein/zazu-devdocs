@@ -29,7 +29,7 @@
   "homepage": "https://github.com/danielbayerlein/zazu-devdocs#readme",
   "devDependencies": {
     "husky": "^0.13.3",
-    "jest": "^19.0.2",
+    "jest": "^20.0.1",
     "snazzy": "^7.0.0",
     "standard": "^10.0.2"
   },
