@@ -28,14 +28,14 @@
   },
   "homepage": "https://github.com/danielbayerlein/zazu-devdocs#readme",
   "devDependencies": {
-    "husky": "^0.13.3",
-    "jest": "^20.0.1",
+    "husky": "^0.14.3",
+    "jest": "^20.0.4",
     "snazzy": "^7.0.0",
     "standard": "^10.0.2"
   },
   "dependencies": {
     "cache-conf": "^0.5.0",
-    "got": "^6.7.1"
+    "got": "^7.1.0"
   },
   "jest": {
     "bail": true,
