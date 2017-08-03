@@ -6,7 +6,8 @@ const GOT_OPTIONS = {
   json: true,
   headers: {
     'user-agent': `${pkg.name}/${pkg.version} (${pkg.homepage})`
-  }
+  },
+  useElectronNet: false
 }
 
 const CACHE_CONF = {

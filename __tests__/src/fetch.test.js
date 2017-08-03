@@ -45,7 +45,8 @@ describe('fetch.js', () => {
               json: true,
               headers: {
                 'user-agent': `${pkg.name}/${pkg.version} (${pkg.homepage})`
-              }
+              },
+              useElectronNet: false
             }
           )
         })
@@ -134,7 +135,8 @@ describe('fetch.js', () => {
               json: true,
               headers: {
                 'user-agent': `${pkg.name}/${pkg.version} (${pkg.homepage})`
-              }
+              },
+              useElectronNet: false
             }
           )
         })
